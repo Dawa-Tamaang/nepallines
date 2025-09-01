@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "599967976714",
+    "project_id": "nepallineslogistic",
+    "storage_bucket": "nepallineslogistic.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599967976714:android:62c51111fc841a95327ef3",
+        "android_client_info": {
+          "package_name": "com.beeach.nepallines"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK_B5aW_2cUKAtXfElgJxfPQ1Cgsjiu1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

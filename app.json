@@ -2,7 +2,9 @@
   "expo": {
     "name": "nepallines",
     "slug": "nepallines",
+    "scheme": "nepallines",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,25 +24,24 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.beeach.nepallines"
+      "package": "com.beeach.nepallines",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font"
-    ],
     "extra": {
       "eas": {
-        "projectId": "515023f4-e257-46d3-a6a2-199c0bcad65a"
+        "projectId": "99ebc9d2-8fc0-4875-98f1-a4230471d67e"
       }
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/515023f4-e257-46d3-a6a2-199c0bcad65a"
     },
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "owner": "t-dawa",
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Platform,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -17,24 +18,31 @@ import importerExporterIcon from "../images/4.png";
 import truck from "../images/delivery-truck.png";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import TopBar from "../components/TopBar";
 
 const BusinessTypeScreen = () => {
+  
   const navigation = useNavigation();
+ 
+  const {top} = useSafeAreaInsets();
   const [loaded] = useFonts({
     poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
     poppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
     poppinsLight: require("../assets/fonts/Poppins-Light.ttf"),
     poppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
   });
+  
 
   if (!loaded) {
     return null; 
   }
+  
 
   const list = [
     {
       id: "0",
-      name: "Truck owner",
+      name: "Truck Owner",
       image: truckOwnerIcon,
       route: "truckpage", 
     },
@@ -42,19 +50,19 @@ const BusinessTypeScreen = () => {
       id: "1",
       name: "CHA",
       image: chaIcon,
-      route: "monthly", 
+      route: "sign", 
     },
     {
       id: "2",
       name: "Forwarder",
       image: forwarderIcon,
-      route: "monthly", 
+      route: "sign", 
     },
     {
       id: "3",
       name: "Importer/Exporter",
       image: importerExporterIcon,
-      route: "monthly", 
+      route: "sign", 
     },
   ];
 
@@ -72,38 +80,12 @@ const BusinessTypeScreen = () => {
 
   return (
     <SafeAreaView style={{backgroundColor:'white',flex:1}}>
-      <View
-        style={{
-          
-          justifyContent: "center",
-          shadowColor: "#000",
-          height: 50,
-          width: "100%",
-
-          borderBottomEndRadius: 15,
-          borderBottomLeftRadius: 15,
-          borderBottomWidth: 2,
-          borderColor: "lightgrey",
-          backgroundColor:'white'
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 12,
-            color: "#B30000",
-            fontFamily: "poppinsBold",
-            marginLeft: '5%',
-          }}
-        >
-          Quick Profile Setup
-        </Text>
-      </View>
+      <TopBar title={"Quick Profile Setup"}/>
       <LinearGradient
         colors={["white", "#cfebf9"]}
         style={{
           height: "8%",
-          width: "96%",
-          marginTop: 20,
+          width: "100%",
           borderRadius: 5,
           justifyContent: "center",
           alignSelf: "center",
@@ -249,5 +231,3 @@ const BusinessTypeScreen = () => {
 };
 
 export default BusinessTypeScreen;
-
-const styles = StyleSheet.create({});

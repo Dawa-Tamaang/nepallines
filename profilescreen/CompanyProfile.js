@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
-import React from "react";
+import { Text, View, SafeAreaView, Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import check11 from "../images/check1.jpg";
+import check11 from "../images/check1.png";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
-import { Card } from "react-native-shadow-cards";
+import TopBar from "../components/TopBar";
 
 const CompanyProfile = () => {
   const [loaded] = useFonts({
@@ -21,40 +20,7 @@ const CompanyProfile = () => {
   return (
     <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
       {/* Header with shadow card */}
-      <View
-        style={{
-          height: 60,
-          width: "100%",
-          justifyContent: "flex-start",
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: "#B30000",
-          borderBottomLeftRadius: 12,
-          borderBottomRightRadius: 12,
-          shadowColor: '#000', 
-          shadowOffset: { width: 0, height: 6 }, 
-          shadowOpacity: 0.39, 
-          shadowRadius: 8.3, 
-          elevation: 13, 
-        }}
-      >
-        <AntDesign
-          name="arrowleft"
-          size={20}
-          color="white"
-          style={{ marginLeft: 20 }}
-        />
-        <Text
-          style={{
-            fontSize: 15,
-            marginLeft: 10,
-            color: "white",
-            fontFamily: "poppinsMedium",
-          }}
-        >
-          Company Profile
-        </Text>
-      </View>
+      <TopBar title={"Company Profile"}/>
 
 
       {/* Content */}

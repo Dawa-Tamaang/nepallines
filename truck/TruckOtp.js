@@ -1,154 +1,110 @@
 import {
-  StyleSheet,
+  Pressable,
+  SafeAreaView,
   Text,
   View,
-  SafeAreaView,
-  TextInput,
-  Pressable,
 } from "react-native";
-import React from "react";
+import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
-
+import { useFonts } from "expo-font";
+import OTPInput from "../components/OTPInput ";
 const TruckOtp = () => {
   const navigation = useNavigation();
-  const [loaded] = useFonts({
-    poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
-    poppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
-    poppinsLight: require("../assets/fonts/Poppins-Light.ttf"),
-    poppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
-  });
-
-  if (!loaded) {
-    return null; // You might want to render a loading indicator here instead
-  }
+    
+    const [otpCode, setOtpCode] = useState("");
+    const [error, setError] = useState("");
+  
+    const [loaded] = useFonts({
+      poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
+      poppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
+      poppinsLight: require("../assets/fonts/Poppins-Light.ttf"),
+      poppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
+    });
+    const onOTPComplete = (code) => {
+    if (code.trim().length === 4) {
+      setError("");
+      
+    }
+  };
+    const handleSubmit = () => {
+      if (otpCode.trim().length !== 4) {
+        setError("Please enter the 4-digits OTP code.");
+        return;
+      }
+      navigation.navigate("truckaccount");
+    };
   return (
     <SafeAreaView>
-      <View
-        style={{
-          height: 60,
-          width: "100",
-          borderWidth: 1,
-          borderColor: "lightgrey",
-          borderRadius:12
-        }}
-      >
+      <View style={{ backgroundColor: "#B30000", height: "100%" }}>
         <Ionicons
-          name="arrow-back"
-          size={24}
-          color="#B30000"
-          style={{ margin: 10, marginTop: 10 }}
+          onPress={() => navigation.navigate("sign")}
+          style={{ marginTop: "15%", margin: "5%" }}
+          name="arrow-back-circle-sharp"
+          size={40}
+          color="lightgrey"
         />
+        <View style={{ flexDirection: "row", justifyContent: "center", marginTop: "2.5%" }}>
+          <Text style={{ fontSize: 30, color: "white", margin: "1%", fontFamily: "poppinsBold" }}>
+            Nepal
+          </Text>
+          <Text style={{ fontSize: 30, color: "white", margin: "1%", fontFamily: "poppinsBold" }}>
+            Lines
+          </Text>
+        </View>
+
+        <View style={{ backgroundColor: "white", height: "100%", marginTop: "12%", borderRadius: 16 }}>
+          <View style={{ margin: "5%" }}>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontWeight: "bold", fontSize: 12, color: "#B30000", fontFamily: "poppinsBold" }}>
+                Verification
+              </Text>
+              <Text style={{ fontSize: 10, fontFamily: "poppinsMedium" }}>
+                Enter Your Code
+              </Text>
+            </View>
+
+            {/* OTPInput Component */}
+            <OTPInput value={otpCode} setValue={setOtpCode} error={error} onComplete={onOTPComplete}/>
+
+            {/* Error Message */}
+            {error ? (
+              <Text style={{ color: 'red', fontSize: 12, marginTop: 5, fontFamily: "poppinsMedium", textAlign: 'center' }}>
+                {error}
+              </Text>
+            ) : null}
+
+            <Pressable
+              onPress={handleSubmit}
+              style={{
+                height: 50,
+                width: '100%',
+                backgroundColor: "#B30000",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "8%",
+                alignSelf: 'center',
+                borderRadius: 10,
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 12, fontFamily: "poppinsBold" }}>
+                Submit
+              </Text>
+            </Pressable>
+
+            <Pressable
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                marginTop: "5%",
+              }}
+            >
+            </Pressable>
+          </View>
+        </View>
       </View>
-      <View style={{ margin: 22, marginTop: 55 }}>
-        <Text
-          style={{ fontFamily: "poppinsBold", color: "#B30000", fontSize: 14 }}
-        >
-          Enter OTP
-        </Text>
-        <Text
-          style={{ fontFamily: "poppinsBold", color: "gray", fontSize: 12 }}
-        >
-          we have sent a OTP on
-        </Text>
-        <Text
-          style={{ fontFamily: "poppinsBold", color: "gray", fontSize: 12 }}
-        >
-          your Number
-        </Text>
-      </View>
-      <View
-        style={{
-          justifyContent: 'space-evenly',
-          flexDirection: "row",
-          
-          marginTop: 29,
-          
-        }}
-      >
-        <TextInput
-          style={{
-            borderWidth: 2,
-            width: 40,
-            backgroundColor: "#B30000",
-            borderColor: "#B30000",
-            borderRadius: 9,
-            height: 40,
-            color: "white",
-          }}
-        ></TextInput>
-        <TextInput
-          style={{
-            borderWidth: 2,
-            width: 40,
-            backgroundColor: "#B30000",
-            borderColor: "#B30000",
-            borderRadius: 9,
-            height: 40,
-            color: "white",
-          }}
-        ></TextInput>
-        <TextInput
-          style={{
-            borderWidth: 2,
-            width: 40,
-            backgroundColor: "#B30000",
-            borderColor: "#B30000",
-            borderRadius: 9,
-            height: 40,
-            color: "white",
-          }}
-        ></TextInput>
-        <TextInput
-          style={{
-            borderWidth: 2,
-            width: 40,
-            backgroundColor: "#B30000",
-            borderColor: "#B30000",
-            borderRadius: 9,
-            height: 40,
-            color: "white",
-          }}
-        ></TextInput>
-      </View>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 30,
-        }}
-      >
-        <Text
-          style={{ fontFamily: "poppinsBold", color: "#B30000", fontSize: 12 }}
-        >
-          OTP auto sends in 12 seconds
-        </Text>
-      </View>
-      <Pressable
-        onPress={() => navigation.navigate("truckaccount")}
-        style={{
-          height: 50,
-          width: "90%",
-          backgroundColor: "#B30000",
-          justifyContent: "center",
-          alignItems: "center",
-       
-          borderRadius: 9,
-          alignSelf:'center',
-          marginTop:'10%'
-        }}
-      >
-        <Text
-          style={{ fontFamily: "poppinsBold", color: "white", fontSize: 12 }}
-        >
-          verify
-        </Text>
-      </Pressable>
     </SafeAreaView>
   );
 };
 
 export default TruckOtp;
-
-const styles = StyleSheet.create({});

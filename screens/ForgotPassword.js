@@ -3,29 +3,40 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   View,
   StatusBar
 } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-
-import { AntDesign } from "@expo/vector-icons";
+import InputField from "../components/InputField";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 
 const Forgotpassword = () => {
   const navigation = useNavigation();
-  const [text, setText] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errors, setErrors] = useState({});
+  const validateField = (fieldName, value) => {
+    let error = "";
+    switch (fieldName) {
+      case "phone":
+        if (!/^9[78]\d{8}$/.test(value)) {
+          error = "Enter a Valid Mobile Number";
+        }
+        break;
+      default:    
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [fieldName]: error }));
+    return error;
+  }
 
-  const onChangeText = (inputText) => {
-    setText(inputText);
-  };
+  const clearField = (fieldName, setValue) => {
+    setValue("");
+    setErrors((prevErrors) => ({ ...prevErrors, [fieldName]: "" }));
+  };  
 
-  const clearTextInput = () => {
-    setText("");
-  };
-
+  
   const [loaded] = useFonts({
     poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
     poppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
@@ -93,31 +104,28 @@ const Forgotpassword = () => {
               <Text style={{ fontSize: 10, fontFamily: 'poppinsMedium' }}>Check Your Message For OTP</Text>
             </View>
             <View style={{ marginTop: "8%" }}>
-              <Text style={{ color: "#B30000", marginTop: "3%", fontSize: 10, fontFamily: 'poppinsMedium' }}>Phone Number</Text>
-              <View style={{ marginTop: "0%", flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TextInput
-                  value={text}
-                  onChangeText={onChangeText}
-                  style={{ borderBottomWidth: 2, fontSize: 12, width: "90%" }}
-                  placeholder="Enter registered phone number"
-                ></TextInput>
-                <AntDesign
-                  onPress={clearTextInput}
-                  name="closecircle"
-                  size={20}
-                  color="black"
-                  margin={10}
-                />
-              </View>
+              <InputField
+                label="Phone Number"
+                value={phone}
+                onChangeText={(text) => { setPhone(text); validateField('phone', text); }}
+                placeholder="Enter your phone number"
+                clearValue={() => clearField('phone', setPhone)}
+                keyboardType="phone-pad"
+                error={errors.phone}
+              />
               <Pressable
-                onPress={() => navigation.navigate("Otp")}
+                onPress={() => {
+                  if (!validateField('phone', phone)) {
+                    navigation.navigate("otp", { phone });
+                  }
+                }}
                 style={{
                   height: 50,
                   width: '100%',
                   backgroundColor: "#B30000",
                   justifyContent: "center",
                   alignItems: "center",
-                  marginTop: "15%",
+                  marginTop: "5%",
                   alignSelf: 'center',
                   borderRadius: 10,
                 }}

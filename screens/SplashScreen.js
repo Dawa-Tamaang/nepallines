@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Pressable,
   SafeAreaView,
@@ -46,7 +45,7 @@ const SplashScreen = () => {
             </ShadowCard>
           </Pressable>
           <Pressable
-            onPress={() => navigation.navigate("sign")}
+            onPress={() => navigation.navigate("business")}
             accessibilityLabel="Sign Up Button"
           >
             <ShadowCard style={[styles.button, styles.signUpButton]}>

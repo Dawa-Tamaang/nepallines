@@ -8,13 +8,18 @@ import {
   FlatList,
   Image,
   Pressable,
+  TouchableOpacity, Alert,Platform,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
-
+import * as ImagePicker from "expo-image-picker";
+import axios from "axios"; 
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import TopBar from "../components/TopBar";
+const iso = Platform.OS === "ios";
 const TruckKyc = () => {
   const navigation = useNavigation();
+  const {top} = useSafeAreaInsets();
   const [loaded] = useFonts({
     poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
     poppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
@@ -22,7 +27,7 @@ const TruckKyc = () => {
     poppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
   });
 
-  // Sample truck data, replace with your actual data
+  
   const truckData = [
     { id: "1", image: require("../images/uploadfile.png"),filename:'Pan' },
     { id: "2", image: require("../images/uploadfile.png"),filename:'Company Registration' },
@@ -35,29 +40,49 @@ const TruckKyc = () => {
   const [companyName, setCompanyName] = useState("");
   const [numColumns, setNumColumns] = useState(3);
 
-  if (!loaded) {
-    return null; // You might want to render a loading indicator here instead
-  }
+  const handleImageUpload = async (item) => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission denied", "Camera roll access is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const formData = new FormData();
+      formData.append("file", {
+        uri: result.assets[0].uri,
+        name: "photo.jpg",
+        type: "image/jpeg",
+      });
+
+      try {
+        const response = await axios.post("https://your-server.com/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        setTruckData(truckData.map(truck => 
+          truck.id === item.id ? { ...truck, image: { uri: response.data.imageUrl } } : truck
+        ));
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    }
+  };
+
+  if (!loaded) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: "white" }}>
-        <View style={{ margin: 10, flexDirection: "row" ,borderBottomWidth:1,borderBlockColor:'lightgray',height:50,margin:10}}>
-          <Ionicons name="arrow-back" size={24} color="#B30000"  style={{ marginLeft:10,marginTop:10}}/>
-
-          <Text
-            style={{
-              fontFamily: "poppinsBold",
-              color: "#B30000",
-              fontSize: 12,
-              marginLeft: 10,
-              marginTop:10
-            }}
-          >
-            Kyc
-          </Text>
-        </View>
-        <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1,backgroundColor: "white" }}>
+      <View style={{ flex: 1, paddingTop:iso?top:top+10 }}>
+        <TopBar title={'KYC Details'}/>
+        <View style={styles.formContainer}>
           <View style={{marginTop:10}}>
             <Text style={styles.label}>Customs Selection</Text>
             <TextInput
@@ -101,10 +126,12 @@ const TruckKyc = () => {
             numColumns={numColumns}
             contentContainerStyle={styles.truckList}
             renderItem={({ item }) => (
-              <View style={styles.truckImageContainer}>
-                <Image source={item.image} style={styles.truckImage} />
-                <Text style={{margin:5,fontFamily:'poppinsMedium',marginBottom:-1,fontSize:8}}>{item.filename}</Text>
-              </View>
+              <TouchableOpacity onPress={() => handleImageUpload(item)}>
+                <View style={styles.truckImageContainer}>
+                  <Image source={item.image} style={styles.truckImage} />
+                  <Text style={{margin:5,fontFamily:'poppinsMedium',marginBottom:-1,fontSize:8}}>{item.filename}</Text>
+                </View>
+              </TouchableOpacity>
             )}
             keyExtractor={(item) => item.id}
           />
@@ -143,55 +170,53 @@ const TruckKyc = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    borderTopEndRadius: 30,
-    borderTopLeftRadius: 30,
-  
+  formContainer: {
+    padding: 20, marginTop: 30 
   },
-  heading: {
-    marginHorizontal: 20,
-    fontFamily: "poppinsBold",
-    fontSize: 12,
-    color: "#B30000",
-    marginBottom: 20,
-    marginTop: 30,
+  header: {
+    position: "absolute",
+    paddingTop: 30,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderBottomEndRadius: 12,
+    borderBottomLeftRadius: 12,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
   },
+  backButton: {
+    padding: 10,
+    borderRadius: 20,
+    
+  },
+  headerText: { 
+    fontFamily: "poppinsBold", 
+    fontSize: 16, 
+    color: "#B30000", 
+    marginLeft: 15 
+  },
+  heading: { marginHorizontal: 10, fontFamily: "poppinsBold", fontSize: 10, color: "#B30000", marginVertical: 20 },
   label: {
-    marginLeft: 20,
-    fontFamily: "poppinsMedium",
-    fontSize: 10,
-   
-    marginTop: 20,
+    color: "#B30000", fontFamily: "poppinsMedium", fontSize: 12, marginBottom: 4 
   },
   input: {
-    width: "90%",
-    borderBottomWidth: 1,
-    marginLeft: 20,
-    marginTop: -5,
-    borderColor: "lightgray",
-    
-    fontSize:12
+    height: 40, paddingHorizontal: 10, fontSize: 14, width: "90%", borderRadius: 5, borderColor: "lightgray", borderWidth: 1
   },
   truckList: {
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
   truckImageContainer: {
-    width: 110,
-    height: 130,
-    borderWidth: 1,
-    borderColor: "lightgray",
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: 5,
-    marginVertical: 5,
-    borderRadius: 9,
+    width: 80, height: 100, borderWidth: 1, borderColor: "lightgray", justifyContent: "center", alignItems: "center", margin: 5, borderRadius: 9
   },
   truckImage: {
-    width: 75,
-    height: 75,
+    width: 50, height: 50
   },
   switchButton: {
     color: "white",

@@ -1,11 +1,8 @@
-import React from "react";
 import { Image, Text,Dimensions, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Entypo, AntDesign, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-
 import SplashScreen from "../screens/SplashScreen";
 import HomeScreen from "../screens/HomeScreen";
 import Services from "../screens/Services";
@@ -14,35 +11,44 @@ import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import Forgotpassword from "../screens/ForgotPassword";
 import Otp from "../screens/Otp";
+import SetMap from "../screens/SetMap";
 import BusinessTypeScreen from "../screens/BusinessTypeScreen";
 import Customs from "../screens/Customs";
 import Destination from "../screens/Destination";
 import MonthlyShipment from "../screens/MonthlyShipment";
 import Profile from "../screens/Profile";
-import Vessels from "../screen2/Vessels";
-import TruckDetails from "../screen2/TruckDetails";
-import TruckSchedule from "../screen2/TruckSchedule";
-import ATCC from "../screen2/ATCC";
-import Charge from "../screen2/Charge";
 import ResetPassword from "../profilescreen/ResetPassword";
-
 import AccountVerification from "../profilescreen/AccountVerification";
 import TruckPage from "../truck/TruckPage";
 import CompanyProfile from "../profilescreen/CompanyProfile";
-
 import IInviteEarn from "../profilescreen/IInviteEarn";
 import Chat from "../profilescreen/Chat";
-
 import TruckOtp from "../truck/TruckOtp";
 import TruckAccount from "../truck/TruckAccount";
 import TruckDetailsPage from "../truck/TruckDetailsPage";
 import TruckKyc from "../truck/TruckKyc";
 import TruckHomePage from "../truck/TruckHomePage";
 import TruckInbox from "../truck/TruckInbox";
-import TruckEarningPage from "../truck/TruckEarningPage";
+import LoadDetails from "../screens/LoadDetails";
 import TruckOrderPage from "../truck/TruckOrderPage";
 import EditProfile from "../profilescreen/EditProfile";
 import CreatedProfile from "../screens/CreatedProfile";
+import SetLocation from "../screens/SetLocation";
+import ContactDetails from "../screens/ContactDetails";
+import DeliveryDetails from "../screens/DeliveryDetails";
+import DriverLoginScreen from "../truckdriver/driverlogin";
+import DriverHome from "../truckdriver/driverhome";
+import PickupScreen from "../screens/PickUp";
+import DeliveryScreen from "../screens/Delivery";
+import CommodityPage from "../screens/CommodityPage";
+import SearchScreen from "../screens/SearchScreen";
+import MyOrderDetails from "../screens/MyOrderDetails";
+import ConfirmScreen from "../screens/ConfirmScreen";
+import NotificationScreen from "../screens/NotificationScreen";
+import CitySetScreen from "../truck/CitySetScreen";
+import SupportScreen from "../profilescreen/SupportScreen";
+import ChatwithUs from "../screens/ChatwithUs";
+import FAQScreen from "../screens/FaqsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,7 +68,7 @@ function CustomTabBarLabel({ focused, title, marginTop }) {
 
 function BottomTabs() {
   const { width } = Dimensions.get('window');
-  const iconSize = width > 400 ? 30 : 25; // Responsive icon size
+  const iconSize = width > 400 ? 30 : 25; 
 
   return (
     <Tab.Navigator
@@ -77,7 +83,7 @@ function BottomTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Home" />,
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Home" marginTop={5} />,
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -92,7 +98,7 @@ function BottomTabs() {
         name="Services"
         component={Services}
         options={{
-          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Services" />,
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Services" marginTop={5} />,
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -107,7 +113,7 @@ function BottomTabs() {
         name="Order"
         component={Order}
         options={{
-          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Order" marginTop={-5} />,
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Order" marginTop={5} />,
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -118,68 +124,82 @@ function BottomTabs() {
           ),
         }}
       />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Profile" marginTop={5} />,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../images/user.png')}
+              style={{ width: iconSize, height: iconSize, tintColor: focused ? '#B30000' : 'black' }}
+              accessibilityLabel="Profile Icon"
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
 
 
 function TruckBottomTabs() {
+  const { width } = Dimensions.get('window');
+  const iconSize = width > 400 ? 30 : 25;
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+    screenOptions={{
+      tabBarStyle: { height: 60 },
+      tabBarLabelStyle: { fontSize: 10 },
+      tabBarActiveTintColor: '#B30000',
+      tabBarInactiveTintColor: 'black',
+    }}
+    >
       <Tab.Screen
-        name="truckhome"
+        name="Home"
         component={TruckHomePage}
         options={{
-          tabBarLabel: "home",
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Home" marginTop={5} />,
           headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Entypo name="home" size={30} color="#B30000" />
-            ) : (
-              <AntDesign name="home" size={30} color="black" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../images/home.png')}
+              style={{ width: iconSize, height: iconSize, tintColor: focused ? '#B30000' : 'black' }}
+              accessibilityLabel="Home Icon"
+            />
+          ),
         }}
       />
-      <Tab.Screen
-        name="truckinbox"
-        component={TruckInbox}
-        options={{
-          tabBarLabel: "inbox",
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <MaterialIcons name="laptop-windows" size={30} color="#B30000" />
-            ) : (
-              <MaterialIcons name="laptop-windows" size={30} color="black" />
-            ),
-        }}
-      />
-      <Tab.Screen
-        name="truckearning"
-        component={TruckEarningPage}
-        options={{
-          tabBarLabel: "my earning",
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <MaterialCommunityIcons name="cash-100" size={30} color="#B30000" />
-            ) : (
-              <MaterialCommunityIcons name="cash-100" size={34} color="black" />
-            ),
-        }}
-      />
+      
       <Tab.Screen
         name="truckorder"
         component={TruckOrderPage}
         options={{
-          tabBarLabel: "orders",
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="orders" marginTop={5} />,
           headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <AntDesign name="filetext1" size={30} color="#B30000" />
-            ) : (
-              <AntDesign name="filetext1" size={30} color="black" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../images/file.png')}
+              style={{ width: iconSize, height: iconSize, tintColor: focused ? '#B30000' : 'black' }}
+              accessibilityLabel="File Icon"
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: ({ focused }) => <CustomTabBarLabel focused={focused} title="Profile" marginTop={5} />,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../images/user.png')}
+              style={{ width: iconSize, height: iconSize, tintColor: focused ? '#B30000' : 'black' }}
+              accessibilityLabel="Profile Icon"
+            />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -196,6 +216,22 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="SetMap"
+          component={SetMap}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ContactDetails"
+          component={ContactDetails}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DeliveryDetails"
+          component={DeliveryDetails}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
           name="login"
           component={LoginScreen}
           options={{ headerShown: false }}
@@ -203,6 +239,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="sign"
           component={SignupScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ConfirmScreen"
+          component={ConfirmScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -220,9 +261,39 @@ const StackNavigator = () => {
           component={BusinessTypeScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen 
+          name="LoadDetails" 
+          component={LoadDetails}  
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="SetLocation" 
+          component={SetLocation}  
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="monthly"
           component={MonthlyShipment}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="driverlogin"
+          component={DriverLoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="driverhome"
+          component={DriverHome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="pickup"
+          component={PickupScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="delivery"
+          component={DeliveryScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -246,35 +317,16 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="profile"
-          component={Profile}
+          name="commodity"
+          component={CommodityPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="vessel"
-          component={Vessels}
+          name="SearchScreen"
+          component={SearchScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="truck"
-          component={TruckDetails}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="schedule"
-          component={TruckSchedule}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="atcc"
-          component={ATCC}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="charge"
-          component={Charge}
-          options={{ headerShown: false }}
-        />
+        
         <Stack.Screen
           name="reset"
           component={ResetPassword}
@@ -313,7 +365,12 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
 
         />
-      
+        <Stack.Screen
+          name="MyOrderDetails"
+          component={MyOrderDetails}
+          options={{ headerShown: false }}
+
+        />
         <Stack.Screen
           name="truckotp"
           component={TruckOtp}
@@ -337,6 +394,36 @@ const StackNavigator = () => {
       <Stack.Screen
         name="truckmain"
         component={TruckBottomTabs}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SupportScreen"
+        component={SupportScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="truckinbox"
+        component={TruckInbox}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="notification"
+        component={NotificationScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="chatwithus"
+        component={ChatwithUs}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="faqs"
+        component={FAQScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="cityset"
+        component={CitySetScreen}
         options={{ headerShown: false }}
       />
       </Stack.Navigator>

@@ -5,15 +5,13 @@ import {
   SafeAreaView,
   Image,
   ActivityIndicator,
-  ScrollView,
 } from "react-native";
-import { Card } from "react-native-shadow-cards";
-import React, { useEffect, useRef } from "react";
-import { AntDesign } from "@expo/vector-icons";
-import check11 from "../images/check1.jpg";
+import { useEffect, useRef } from "react";
+import check11 from "../images/check1.png";
 import { useFonts } from "expo-font";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import TopBar from "../components/TopBar";
 
 const AccountVerification = () => {
   const animation = useRef(null);
@@ -36,30 +34,38 @@ const AccountVerification = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <AntDesign name="arrowleft" size={20} color="black" style={styles.backIcon} />
-          <Text style={styles.headerText}>Account Verification</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Why Verified Badge?</Text>
-          <View style={styles.infoContent}>
-            <View style={styles.infoText}>
-              <Text style={styles.infoItem}>.Get verified account</Text>
-              <Text style={styles.infoItem}>.Hassle free customs clearance</Text>
-              <Text style={styles.infoItem}>.Smooth Booking Process</Text>
-              <Text style={styles.infoItem}>.Prevent from identity theft</Text>
-            </View>
-            <View style={styles.animationContainer}>
-              <LottieView
-                autoPlay
-                ref={animation}
-                style={styles.animation}
-                source={require("../assets/tick2.json")}
-              />
+        <TopBar title="Account Verification" showBackIcon={true} />
+        <LinearGradient colors={["#F0F8FF", "#E6F2FF"]} style={styles.infoCard}>
+          <View>
+            <Text style={styles.infoTitle}>Why Verified Badge?</Text>
+
+            <View style={styles.infoList}>
+              {[
+                "Get verified account",
+                "Hassle free customs clearance",
+                "Smooth Booking Process",
+                "Prevent from identity theft",
+              ].map((item, index) => (
+                <View key={index} style={styles.infoRow}>
+                  <View style={styles.badgeCircle}>
+                    <Text style={styles.badgeText}>{index + 1}</Text>
+                  </View>
+                  <Text style={styles.infoItem}>{item}</Text>
+                </View>
+              ))}
             </View>
           </View>
-        </View>
+
+          <View style={styles.animationContainerCentered}>
+            <LottieView
+              autoPlay
+              ref={animation}
+              style={styles.animationLarge}
+              source={require("../assets/tick2.json")}
+            />
+          </View>
+        </LinearGradient>
+
         <View style={styles.stepsContainer}>
           <StepItem title="File Details" description="Fill personal, company & director info" />
           <StepItem title="Upload Document" description="Upload required document for validation" />
@@ -68,13 +74,12 @@ const AccountVerification = () => {
         <View style={styles.claimButtonContainer}>
           <Text style={styles.claimButtonText}>Claim your badge</Text>
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const StepItem = ({ title, description }) => (
-  <LinearGradient colors={["#DBF0FA", "#89CFF0"]} style={styles.stepItem}>
+  <LinearGradient colors={["#ffffff", "#B30000"]} style={styles.stepItem}>
     <View style={styles.stepImageContainer}>
       <Image source={check11} style={styles.stepImage} />
     </View>
@@ -91,72 +96,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 60,
-    width: "100%",
-    backgroundColor: "white",
-    shadowColor: "#000",
-    alignSelf: "center",
-    borderBottomRightRadius:12,
-    borderBottomLeftRadius:12,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.39,
-    shadowRadius: 8.3,
-    elevation: 13,
-  },
-  backIcon: {
-    marginLeft: 10,
-  },
-  headerText: {
-    marginLeft: 10,
-    fontSize: 14,
-    fontFamily: "poppinsBold",
-    color: "#B30000",
-  },
-  infoCard: {
-    height: 160,
-    
-    borderColor: "lightgrey",
-  },
-  infoTitle: {
-    fontSize: 12,
-    fontFamily: "poppinsBold",
-    margin: 20,
-  },
   infoContent: {
-    
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   infoText: {
     marginLeft: 20,
     marginTop: -20,
   },
-  infoItem: {
-    fontFamily: "poppinsMedium",
-    fontSize: 10,
-  },
+  
   animationContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
   animation: {
-    width: 90,
-    height: 90,
+    width: 120,
+    height: 120,
   },
   stepsContainer: {
-    margin: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
   },
   stepItem: {
     height: 80,
     width: "100%",
-    margin: 22,
-    borderBottomRightRadius:9,
-    borderTopRightRadius:9,
-    borderBottomLeftRadius:45,
-    borderTopLeftRadius:45,
+    marginVertical: 20,
+    borderBottomRightRadius: 9,
+    borderTopRightRadius: 9,
+    borderBottomLeftRadius: 50,
+    borderTopLeftRadius: 50,
     flexDirection: "row",
     alignSelf: "center",
     justifyContent: "flex-start",
@@ -164,15 +133,15 @@ const styles = StyleSheet.create({
   stepImageContainer: {
     height: 80,
     width: 80,
-    borderRadius: 45,
+    borderRadius: 50,
     backgroundColor: "white",
-    
     justifyContent: "center",
     alignItems: "center",
+    marginLeft: -2
   },
   stepImage: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
   },
   stepTextContainer: {
     justifyContent: "center",
@@ -183,31 +152,103 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 12,
     fontFamily: "poppinsBold",
+    color: "#003366",
   },
   separator: {
     height: 1,
     width: "100%",
-    backgroundColor: "black",
+    backgroundColor: "white",
   },
   stepDescription: {
     fontFamily: "poppinsMedium",
     fontSize: 8,
+    color: "white",
   },
   claimButtonContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    right: 20,
     height: 55,
-    width: "95%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#B30000",
     borderRadius: 9,
-    marginTop: 150,
-    alignSelf: "center",
+    zIndex: 10,
+    elevation: 10,
   },
+
   claimButtonText: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "poppinsMedium",
     color: "white",
   },
+  infoCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    marginHorizontal: 15,
+    marginTop: 20,
+    borderRadius: 16,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    backgroundColor: "#F0F8FF",
+},
+
+infoTitle: {
+  fontSize: 16,
+  fontFamily: "poppinsBold",
+  marginBottom: 15,
+  color: "#003366",
+},
+
+infoList: {
+  marginBottom: 10,
+},
+
+infoRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginBottom: 5,
+},
+
+badgeCircle: {
+  width: 24,
+  height: 24,
+  borderRadius: 12,
+  backgroundColor: "#B30000",
+  justifyContent: "center",
+  alignItems: "center",
+  marginRight: 8,
+},
+
+badgeText: {
+  color: "white",
+  fontSize: 10,
+  fontFamily: "poppinsMedium",
+},
+
+infoItem: {
+  fontSize: 10,
+  fontFamily: "poppinsMedium",
+  color: "#333",
+  flexShrink: 1,
+},
+
+animationContainerCentered: {
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+animationLarge: {
+  width: 80,
+  height: 80,
+},
+
 });
 
 export default AccountVerification;

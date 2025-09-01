@@ -4,11 +4,12 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   View,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import InputField from "../components/InputField";
 import PasswordInput from "../components/PasswordInput";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -16,10 +17,9 @@ import { useFonts } from "expo-font";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [text, setText] = useState("");
-
-  const onChangeText = (inputText) => setText(inputText);
-  const clearTextInput = () => setText("");
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
 
   const [loaded] = useFonts({
     poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
@@ -29,8 +29,59 @@ const LoginScreen = () => {
   });
 
   if (!loaded) {
-    return null; 
+    return null;
   }
+
+  const validateField = (fieldName, value) => {
+    let error = '';
+    switch (fieldName) {
+      case 'phone':
+        if (!/^9[78]\d{8}$/.test(value)) {
+          error = 'Enter a Valid Mobile Number';
+        }
+        break;
+      case 'password':
+        if (!value.trim()) {
+          error = 'Password is required';
+        } else if (value.trim().length < 6) {
+          error = 'Password must be at least 6 Characters';
+        }
+        break;
+      default:
+        break;
+    }
+    setErrors(prev => ({ ...prev, [fieldName]: error }));
+  };
+
+  const clearField = (fieldName, setValue) => {
+    setValue('');
+    setErrors(prev => ({ ...prev, [fieldName]: '' }));
+  };
+
+  const fields = { phone, password };
+
+  const handleSubmit = () => {
+    let newErrors = {};
+
+    Object.entries(fields).forEach(([key, value]) => {
+      validateField(key, value);
+      if (!value.trim() || (errors[key] && errors[key] !== '')) {
+        newErrors[key] = errors[key] || 'This field is required';
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      navigation.navigate("Main");
+    } catch (err) {
+      console.log(err);
+      Alert.alert("Error", "Something went wrong.");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -51,51 +102,41 @@ const LoginScreen = () => {
       <View style={styles.formBackground}>
         <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           <Text style={styles.loginTitle}>Login</Text>
-          <Text style={styles.label}>Email ID</Text>
-          <View style={styles.inputRow}>
-            <TextInput
-              value={text}
-              onChangeText={onChangeText}
-              style={styles.textInput}
-              placeholder="Enter registered email address"
-            />
-            {text.length > 0 && (
-              <AntDesign
-                onPress={clearTextInput}
-                name="closecircle"
-                size={20}
-                color="black"
-                style={styles.icon}
-              />
-            )}
-          </View>
-          <Text style={styles.label}>Password</Text>
-          <PasswordInput />
           
-          <Pressable
-            onPress={() => navigation.navigate("Main")}
-            style={styles.loginButton}
-          >
+            <InputField
+              label="Phone Number"
+              value={phone}
+              onChangeText={(text) => { setPhone(text); validateField('phone', text); }}
+              placeholder="Enter your phone number"
+              clearValue={() => clearField('phone', setPhone)}
+              keyboardType="phone-pad"
+              error={errors.phone}
+            />
+          <Text style={styles.inputLabel}>Password</Text>
+          <PasswordInput
+            value={password}
+            placeholder={"Enter your password"}
+            onChangeText={(text) => { setPassword(text); validateField('password', text); }}
+            clearValue={() => clearField('password', setPassword)}
+            error={errors.password}
+          />
+          {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+
+          <Pressable onPress={handleSubmit} style={styles.loginButton}>
             <Text style={styles.loginButtonText}>Login</Text>
           </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate("sign")}
-            style={styles.signupLink}
-          >
+
+          <Pressable onPress={() => navigation.navigate("business")} style={styles.signupLink}>
             <Text style={styles.signupText}>Don't have an account? </Text>
             <Text style={styles.signupLinkText}>Signup here</Text>
           </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate("forgot")}
-            style={styles.forgotPassword}
-          >
+          <Pressable onPress={() => navigation.navigate("forgot")} style={styles.forgotPassword}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </Pressable>
+
           <View style={styles.divider} />
           <View style={styles.footerContainer}>
-            <Text style={styles.footerText}>
-              By proceeding you agree to Nepal Lines
-            </Text>
+            <Text style={styles.footerText}>By proceeding you agree to Nepal Lines</Text>
             <Pressable>
               <Text style={styles.linkText}>Privacy Policy</Text>
             </Pressable>
@@ -104,7 +145,7 @@ const LoginScreen = () => {
               <Text style={styles.linkText}>Terms and Conditions</Text>
             </Pressable>
           </View>
-          <Pressable style={{alignItems: "center",justifyContent: "center"}}>
+          <Pressable style={{alignItems: "center", justifyContent: "center"}}>
             <Text style={styles.linkText}>Refund and cancellation policy</Text>
           </Pressable>
         </ScrollView>
@@ -115,12 +156,14 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
+    
     flex: 1,
     backgroundColor: "#B30000",
+
   },
   headerContainer: {
     paddingHorizontal: 20,
-    paddingTop: "5%",
+    paddingTop: "20%",
   },
   backIcon: {
     marginBottom: 10,
@@ -155,6 +198,12 @@ const styles = StyleSheet.create({
   label: {
     color: "#B30000",
     fontFamily: 'poppinsMedium',
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  inputLabel: {
+    color: "#B30000",
+    fontFamily: "poppinsMedium",
     fontSize: 12,
     marginBottom: 4,
   },
@@ -238,6 +287,13 @@ const styles = StyleSheet.create({
     fontFamily: "poppinsMedium",
     fontSize: 8,
   },
+  errorText: {
+    color: 'red',
+    fontSize: 10,
+    marginBottom: 10,
+    marginTop: -10,
+    marginLeft: 4,
+  }
 });
 
 export default LoginScreen;

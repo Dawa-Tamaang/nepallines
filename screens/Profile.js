@@ -17,29 +17,28 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
-import forwarderIcon from "../images/3.png";
+
 import { useFonts } from "expo-font";
 import { Card } from "react-native-shadow-cards";
+import TopBar from "../components/TopBar";
 
 const Profile = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
 
-  // Profile data
   const profileData = {
     name: "MBT Production",
     email: "dawagmail.com",
-    phone: "+685251121321",
+    phone: "+977 9812511213",
   };
 
-  // Menu items
   const menuItems = [
     { icon: "file-text", type: "FontAwesome", label: "Order", route: "Order" },
     {
       icon: "question-circle",
       type: "FontAwesome",
       label: "Help and Support",
-      route: "has",
+      route: "SupportScreen",
     },
     { icon: "star-o", type: "FontAwesome", label: "Rate Us", route: "rate" },
     {
@@ -54,7 +53,6 @@ const Profile = () => {
       label: "Invite and Earn",
       route: "inviteearn",
     },
-    { icon: "comments-o", type: "FontAwesome", label: "Chat", route: "chat" },
     {
       icon: "refresh",
       type: "FontAwesome",
@@ -76,23 +74,12 @@ const Profile = () => {
     poppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
   });
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Card style={styles.header}>
-          <AntDesign
-            onPress={() => navigation.navigate("Main")}
-            name="arrowleft"
-            size={28}
-            color="black"
-            style={styles.backIcon}
-          />
-          <Text style={styles.headerTitle}>Account</Text>
-        </Card>
+        <TopBar title={"Account"} />
         <View style={styles.profileContainer}>
           <View style={styles.profileIcon}>
             <MaterialIcons name="account-circle" size={90} color="#CDCDCD" />
@@ -118,26 +105,15 @@ const Profile = () => {
           <MaterialIcons name="chevron-right" size={25} color="#B30000" />
         </Pressable>
 
-
         <Card style={styles.menuCard}>
           {menuItems.map((item, index) => (
             <Pressable
               key={index}
               style={styles.menuItem}
-              onPress={() => {
-                if (item.label === "Help and Support") {
-                  setVisible(true);
-                } else {
-                  navigation.navigate(item.route);
-                }
-              }}
+              onPress={() => navigation.navigate(item.route)}
             >
               <View style={styles.menuItemContent}>
-                {item.type === "FontAwesome" ? (
-                  <FontAwesome name={item.icon} size={25} color="#B30000" />
-                ) : (
-                  <MaterialIcons name={item.icon} size={25} color="#B30000" />
-                )}
+                <FontAwesome name={item.icon} size={25} color="#B30000" />
                 <Text style={styles.menuItemText}>{item.label}</Text>
               </View>
               <MaterialIcons name="chevron-right" size={25} color="#B30000" />
@@ -145,7 +121,6 @@ const Profile = () => {
           ))}
         </Card>
 
-        
         <Pressable
           onPress={() => navigation.navigate("login")}
           style={styles.signOutContainer}
@@ -156,94 +131,14 @@ const Profile = () => {
           </View>
           <MaterialIcons name="chevron-right" size={25} color="#B30000" />
         </Pressable>
-
-        
-
-        {/* Modal for Help and Support */}
-        <Modal style={styles.modal} isVisible={visible} onBackButtonPress={() => setVisible(false)}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Image source={forwarderIcon} style={styles.modalImage} />
-              <View>
-                <Text style={styles.modalHeaderTitle}>Need help?</Text>
-                <Text style={styles.modalHeaderSubText}>Talk to our price consultant</Text>
-              </View>
-              <Entypo
-                name="cross"
-                size={29}
-                color="#B30000"
-                style={styles.closeModalIcon}
-                onPress={() => setVisible(false)}
-              />
-            </View>
-            <View style={styles.modalBody}>
-              <Text style={styles.modalSupportName}>Bibek ACharya</Text>
-              <Text style={styles.modalSupportPhone}>+977 9848986980</Text>
-              <Text style={styles.modalSupportEmail}>kaaknal@gmail.com</Text>
-            </View>
-            <View style={styles.modalFooter}>
-              <FontAwesome name="phone-square" size={40} color="orange" />
-              <View style={styles.modalFooterText}>
-                <Text style={styles.modalFooterTitle}>Schedule a Call Back</Text>
-                <Text style={styles.modalFooterSubtitle}>Get a callback from customer</Text>
-              </View>
-              <Entypo name="chevron-right" size={35} color="lightgrey" />
-            </View>
-            <View style={styles.modalFooter}>
-              <MaterialCommunityIcons name="email" size={40} color="#FFA6C9" />
-              <View style={styles.modalFooterText}>
-                <Text style={styles.modalFooterTitle}>Email Us</Text>
-                <Text style={styles.modalFooterSubtitle}>Get answers to your queries via email</Text>
-              </View>
-              <Entypo name="chevron-right" size={35} color="lightgrey" />
-            </View>
-            <View style={styles.modalFooter}>
-              <MaterialIcons name="chat" size={40} color="#2A84C8" />
-              <View style={styles.modalFooterText}>
-                <Text style={styles.modalFooterTitle}>Chat</Text>
-                <Text style={styles.modalFooterSubtitle}>Instant chat with customer service</Text>
-              </View>
-              <Entypo name="chevron-right" size={35} color="lightgrey" />
-            </View>
-          </View>
-        </Modal>
-
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 60,
-    width: "100%",
-    shadowColor: "#000",
-    alignSelf: "center",
-    borderBottomRightRadius:12,
-    borderBottomLeftRadius:12,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.39,
-    shadowRadius: 8.3,
-    elevation: 13,
-  },
-  backIcon: {
-    marginLeft: 10,
-  },
-  headerTitle: {
-    marginLeft: 10,
-    fontSize: 14,
-    fontFamily: "poppinsBold",
-    color: "#B30000",
-  },
   profileContainer: {
     alignItems: "center",
-    marginVertical: 4,
     alignSelf: "center",
     borderWidth: 1,
     borderColor: "lightgrey",
@@ -251,6 +146,7 @@ const styles = StyleSheet.create({
     height: 200,
     width: "95%",
     marginTop: 10,
+    padding: 10,
   },
   profileIcon: {
     height: 90,
@@ -267,7 +163,6 @@ const styles = StyleSheet.create({
   profileInfo: {
     alignItems: "center",
     marginBottom: 0,
-    fontFamily: "poppinsMedium",
   },
   profileInfoText: {
     fontSize: 10,
@@ -287,29 +182,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 25,
-    marginVertical:10,
-    borderWidth:1,
+    marginVertical: 10,
+    borderWidth: 1,
     borderColor: "lightgrey",
     borderRadius: 9,
   },
-  
   companyProfileIconContainer: {
     flexDirection: "row",
-    alignItems: "center", 
+    alignItems: "center",
   },
-  
   companyProfileText: {
     fontSize: 10,
     marginLeft: 20,
     fontFamily: "poppinsMedium",
   },
   menuCard: {
-    height: 450,
     width: "95%",
     borderWidth: 1,
-    marginLeft: 10,
+    alignSelf: "center",
     borderRadius: 9,
     borderColor: "lightgrey",
+    marginTop: 10,
+    paddingVertical: 10,
   },
   menuItem: {
     height: 56,
@@ -329,7 +223,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontFamily: "poppinsMedium",
   },
-  
   signOutContainer: {
     height: 56,
     width: "95%",
@@ -354,89 +247,74 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontFamily: "poppinsMedium",
   },
-  
   modal: {
-    width: "100%",
-    marginLeft: 0,
-    marginBottom: 0,
-    justifyContent: "flex-end",  
+    justifyContent: "flex-end",
+    margin: 0,
   },
   modalContent: {
     backgroundColor: "#FFFFFF",
+    padding: 20,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    padding: 20,
-    height: 450, 
-    maxHeight: "80%",  
   },
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     marginBottom: 20,
   },
   modalImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    marginRight: 15,
+    height: 40,
+    width: 40,
+    marginRight: 10,
   },
   modalHeaderTitle: {
     fontFamily: "poppinsBold",
-    fontSize: 18,
-    color: "#333",
+    fontSize: 16,
+    color: "#000",
   },
   modalHeaderSubText: {
-    fontFamily: "poppinsMedium",
     fontSize: 12,
-    color: "#777",
+    color: "gray",
+    fontFamily: "poppinsMedium",
   },
   closeModalIcon: {
-    padding: 10,
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   modalBody: {
     marginBottom: 20,
   },
   modalSupportName: {
-    fontFamily: "poppinsBold",
-    fontSize: 16,
-    color: "#333",
+    fontSize: 14,
+    fontFamily: "poppinsMedium",
   },
   modalSupportPhone: {
-    fontFamily: "poppinsMedium",
     fontSize: 12,
-    color: "#555",
-    marginVertical: 5,
+    color: "gray",
   },
   modalSupportEmail: {
-    fontFamily: "poppinsMedium",
     fontSize: 12,
-    color: "#555",
+    color: "gray",
   },
   modalFooter: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 15,
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f1f1f1",
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
   },
   modalFooterText: {
     flex: 1,
-    marginLeft: 15,
+    marginLeft: 10,
   },
   modalFooterTitle: {
-    fontFamily: "poppinsBold",
+    fontFamily: "poppinsMedium",
     fontSize: 14,
-    color: "#333",
   },
   modalFooterSubtitle: {
-    fontFamily: "poppinsMedium",
     fontSize: 12,
-    color: "#777",
+    color: "gray",
   },
 });
 

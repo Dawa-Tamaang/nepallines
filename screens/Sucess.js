@@ -1,9 +1,11 @@
-import { ImageBackground, StyleSheet, Text, View,Pressable } from "react-native";
+import { ImageBackground, StyleSheet, Text, View,Pressable,Platform } from "react-native";
 import React from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+const iso = Platform.OS === "ios";
 const Sucess = () => {
+  const {top} = useSafeAreaInsets();
   const [loaded] = useFonts({
     poppinsBlack: require("../assets/fonts/Poppins-Black.ttf"),
     poppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
@@ -12,10 +14,10 @@ const Sucess = () => {
   });
 
   if (!loaded) {
-    return null; // You might want to render a loading indicator here instead
+    return null; 
   }
   return (
-    <View>
+    <View style={{paddingTop:iso?top:top+10,backgroundColor: "#fff", flex: 1 }}>
       <View
         style={{
           justifyContent: "center",

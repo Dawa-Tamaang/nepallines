@@ -12,6 +12,7 @@ import truck from "../images/delivery-truck.png";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
+import TopBar from "../components/TopBar";
 
 const MonthlyShipment = () => {
   const navigation = useNavigation();
@@ -49,28 +50,12 @@ const MonthlyShipment = () => {
 
   return (
     <SafeAreaView style={{backgroundColor:'white',flex:1}}>
-      <View style={{ 
-        justifyContent: "center",
-        shadowColor: "#000",
-        height: 50,
-        width: "100%",
-
-        borderBottomEndRadius: 12,
-        borderBottomLeftRadius: 12,
-        borderBottomWidth: 2,
-        borderColor: "lightgrey", }}>
-        <Text
-          style={{ fontFamily: "poppinsBold", fontSize: 12, color: "#B30000",marginLeft:10 }}
-        >
-          Quick Profile Setup
-        </Text>
-      </View>
+      <TopBar title={"Quick Profile Setup"}/>
       <LinearGradient
       colors={["white", "#cfebf9"]}
       style={{
         height: "8%",
-        width: "96%",
-        marginTop: 20,
+        width: "100%",
         borderRadius: 5,
         justifyContent: "center",
         alignSelf: "center",

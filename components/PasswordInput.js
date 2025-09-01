@@ -1,33 +1,49 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-const PasswordInput = () => {
-  const [password, setPassword] = useState('');
+const PasswordInput = ({ value, onChangeText, placeholder, error }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(prev => !prev);
   };
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center',marginBottom:16 }}>
+    <View style={styles.inputContainer}>
       <TextInput
-        style={{ height: 40, borderColor: 'lightgray', borderWidth: 1, paddingHorizontal: 10, fontSize: 14, width: '90%',borderRadius: 5,}}
-        placeholder="Enter Password"
-        secureTextEntry={!showPassword}
-        value={password}
-        onChangeText={setPassword}
+        style={[styles.input, error && { borderColor: 'red' }]}
+        placeholder={placeholder}
+        placeholderTextColor="#999"
+        value={value}
+        onChangeText={onChangeText}
+        secureTextEntry={!showPassword}  
       />
-      <TouchableOpacity onPress={togglePasswordVisibility}>
-        {showPassword ? (
-          <AntDesign name="eye" size={24} color="black" style={{marginLeft:10}} />
-        ) : (
-          <AntDesign name="eyeo" size={24} color="black" style={{marginLeft:10}} />
-        )}
+      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconButton}>
+        <Ionicons name={showPassword ? "eye" : "eye-off"} size={22} color="gray" />
       </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  input: {
+    height: 40,
+    paddingHorizontal: 10,
+    fontSize: 14,
+    width: "90%",
+    borderRadius: 5,
+    borderColor: "lightgray",
+    borderWidth: 1,
+  },
+  iconButton: {
+    marginLeft: 10,
+  },
+});
 
 export default PasswordInput;
